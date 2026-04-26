@@ -1,4 +1,4 @@
-"use client"
+"use server"
 import { shippingAddressType } from "@/types/order.type"
 import { getMyToken } from "@/utils/getMyToken"
 

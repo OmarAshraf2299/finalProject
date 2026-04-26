@@ -6,11 +6,8 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Button } from '@/components/ui/button';
 
 // Import Swiper styles
-// @ts-expect-error - swiper styles
 import 'swiper/css';
-// @ts-expect-error - swiper styles
 import 'swiper/css/navigation';
-// @ts-expect-error - swiper styles
 import 'swiper/css/pagination';
 
 interface MySliderPropsType{
@@ -119,3 +116,4 @@ export default function MySlider( {listOfImages , spaceBetwwen = 100 , slidesPer
     </div>
   );
 };
+

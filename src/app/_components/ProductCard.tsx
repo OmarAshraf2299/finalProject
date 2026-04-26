@@ -155,7 +155,7 @@ export default function ProductCard({product}: ProductCardPropsType) {
       </div>
 
       {/* Add to Cart Button */}
-      <AddToCardBtn productId={product.id} />
+      <AddToCardBtn productId={product._id} />
     </div>
   )
 }

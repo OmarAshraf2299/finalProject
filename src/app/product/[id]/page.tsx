@@ -3,7 +3,7 @@ import { getProductById } from '@/services/product';
 import React from 'react'
 import { FaStar } from 'react-icons/fa';
 
-export default async function page({params}) {
+export default async function page({params}: {params: Promise<{id: string}>}) {
   const myPrams = await params
   console.log(myPrams , "myPrams");
 

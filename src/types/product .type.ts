@@ -7,6 +7,7 @@ export interface ProductType {
   price: number,
   images: string[],
   ratingsAverage: number,
+  ratingsCount: number,
   priceAfterDiscount: number,
 
 
