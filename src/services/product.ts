@@ -1,6 +1,4 @@
 import { ProductType } from "@/types/product .type";
-import { log } from "console";
-import { cache } from "react";
 
 export async function getAllProducts() : Promise<ProductType[] | undefined> {
     

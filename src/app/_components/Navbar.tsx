@@ -1,6 +1,6 @@
 "use client"
 
-import * as React from "react"
+import React, {useContext} from "react"
 import Link from "next/link"
 
 import {
@@ -16,13 +16,39 @@ import {
 import logo from "@/images/Freshcart-logo.png"
 import { CiHeart } from "react-icons/ci"
 import { FaShoppingCart, FaUserCircle } from "react-icons/fa"
+import { useSession, signOut } from "next-auth/react"
+import { Button } from "@/components/ui/button"
+import { cartContext } from "../_context/CartContextProvider"
 
 
 export default function Navbar() {
+
+  const { numberOfCartItems } = useContext( cartContext)
+
+  const session = useSession()
+
+ console.log(session ,"session in navbar");
+
+  function handelLogout(){
+    signOut({ redirect : true , callbackUrl : "/login" })
+
+
+
+
+    console.log("logout");
+  }
+
+
+
+
+
+
+
   return (
     <NavigationMenu className=" bg-gray-50 max-w-none py-3 justify-between px-20">
       
       <div>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={logo.src} alt="Logo" />
       </div>
 
@@ -82,7 +108,10 @@ export default function Navbar() {
 
         <NavigationMenuItem>
           <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-            <Link className="bg-transparent hover:bg-transparent" href="/shop"><FaShoppingCart /></Link>
+            <Link className="bg-transparent relative hover:bg-transparent" href="/shop">
+            <span className="bg-green-500 text-white text-xs p-1 rounded-xl absolute top-1 right-0 ">{numberOfCartItems}</span>
+
+            <FaShoppingCart /></Link>
           </NavigationMenuLink>
         </NavigationMenuItem>
 
@@ -98,7 +127,18 @@ export default function Navbar() {
 
   {/* /////////////////////////////////////////////////////////////////////////// */}
 
+      {
 
+        session.data ?
+
+      <NavigationMenuItem>
+          <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+            <Button className="bg-green-500 hover:bg-green-600" onClick={handelLogout}>logout</Button>
+          </NavigationMenuLink>
+        </NavigationMenuItem> :
+        <>
+        
+  
 
         <NavigationMenuItem>
           <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
@@ -112,13 +152,28 @@ export default function Navbar() {
             <Link className="bg-transparent hover:bg-transparent" href="/singup">signup</Link>
           </NavigationMenuLink>
         </NavigationMenuItem>
+        
+        
+        
+        
+        </>
 
 
-        <NavigationMenuItem>
-          <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-            <Link className="bg-transparent hover:bg-transparent" href="/">logout</Link>
-          </NavigationMenuLink>
-        </NavigationMenuItem>
+
+
+
+
+
+
+
+
+
+
+      }
+
+
+
+        
 
 
 

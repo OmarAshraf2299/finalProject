@@ -1,18 +1,14 @@
 "use client"
 
-import MYinput from '@/app/_components/MYinput'
 import { Button } from '@/components/ui/button'
 import { Field, FieldError, FieldLabel } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
-import React from 'react'
+import React, { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from "@hookform/resolvers/zod"
-import {signIn} from "next-auth/react"
-import * as z from "zod"
-import { toast } from 'sonner'
-import { useRouter } from 'next/navigation'
+import { signIn } from "next-auth/react"
 import { loginDataType, loginSchema } from './login.schema'
-import { loginUpAction } from './login.acton'
+import { toast } from 'sonner'
 
 
 
@@ -20,9 +16,7 @@ import { loginUpAction } from './login.acton'
 
 
 export default function Page() {
-
-  const router = useRouter()
-
+  const [isLoading, setIsLoading] = useState(false)
 
   const form = useForm({
     defaultValues : {
@@ -36,9 +30,33 @@ export default function Page() {
 
   async function handelLogin(values : loginDataType){
     console.log(values ,"values");
-
-
-    signIn("credentials" , {  ...values ,   redirect : true , callbackUrl : "/"})
+    
+    try {
+      setIsLoading(true)
+      const result = await signIn("credentials" , {  ...values ,   redirect : false })
+      
+      console.log("SignIn result:", result)
+      
+      if (result?.error) {
+        const errorMsg = result.error === "CredentialsSignin" 
+          ? "Invalid email or password" 
+          : result.error
+        toast.error(errorMsg, { position: "top-center", richColors: true })
+        console.error("Login error:", result.error)
+      } else if (result?.ok) {
+        toast.success("Login successful!", { position: "top-center", richColors: true })
+        window.location.href = "/"
+      } else {
+        toast.error("Login failed", { position: "top-center", richColors: true })
+      }
+    } catch (error) {
+      const errorMsg = error instanceof Error ? error.message : "An error occurred during login"
+      toast.error(errorMsg, { position: "top-center", richColors: true })
+      console.error("Login exception:", error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
 
 
@@ -64,9 +82,6 @@ export default function Page() {
     //     richColors : true
     //   })
     // }
-
-
-  }
 
   return <>
   
@@ -120,7 +135,9 @@ name="password"
 
 
 
-<Button className='w-full my-2 cursor-pointer text-xl'>Login Now</Button>
+<Button className='w-full my-2 cursor-pointer text-xl' disabled={isLoading}>
+  {isLoading ? "Logging in..." : "Login Now"}
+</Button>
 
 
 
